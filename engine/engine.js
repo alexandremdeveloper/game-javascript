@@ -1,12 +1,19 @@
 //variável do jogo
-var canvas, ctx, altura, largura, frames = 0, maxPulos = 3,
+var canvas, ctx, altura, largura, frames = 0, maxPulos = 3, velocidade = 6,
+estadoAtual,
+
+estados = {
+    jogar : 0,
+    jogando: 1,
+    perdeu: 2,
+},
 
 chao = {
     y: 550,
     altura: 50,
     cor: "#e8da78",
 
-    desenha: function (){
+    desenha: function () {
         ctx.fillStyle = this.cor;
         ctx.fillRect(0, this.y, largura, this.altura);
     }
@@ -62,8 +69,27 @@ obstaculos = {
     },
 
     atualiza: function () {
+        if (this.timerInsere ==0)
+            this.insere();
+        else 
+            this.tempoInsere--;
 
+        for (var i = 0, tam = this._obs.length; i < tam; i++) {
+            var obs = this._obs[i];
+
+            obs.x = velocidade;
+
+            if (obs.x <= -obs.largura) {
+                this._obs.splice(i, 1);
+                tam --;
+                i --;
+            }
+        }
     }, 
+
+    limpa: function () {
+        this._obs = [];
+    },
 
     desenha: function () {
         for (var i = 0, tam = this._obs.length;i < tam; i++) {
@@ -98,6 +124,7 @@ function main () {
     document.body.appendChild(canvas);
     document.addEventListener("mousedown", clique);
 
+    estadoAtual = estados.jogar;
     roda();
 }
 
@@ -118,8 +145,12 @@ function desenha () {
     ctx.fillStyle = "#80daff";
     ctx.fillRect(0, 0, largura, altura);
 
-    chao.desenha();
+    if (estadoAtual === estados.jogar) {
+        ctx.fill
+    }
+    
     obstaculos.desenha();
+    chao.desenha();
     bloco.desenha();
     
 }
