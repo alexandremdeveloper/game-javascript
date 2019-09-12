@@ -1,5 +1,5 @@
 //variável do jogo
-var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, estadoAtual, record, img
+var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, estadoAtual, record, img,
 
     estados = {
         jogar: 0,
@@ -21,8 +21,8 @@ var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, esta
     bloco = {
         x: 50,
         y: 0,
-        altura: 50,
-        largura: 50,
+        altura: spriteBoneco.altura,
+        largura: spriteBoneco.largura,
         cor: "#ff9239",
         gravidade: 1.6,
         velocidade: 0,
@@ -61,8 +61,10 @@ var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, esta
         },
 
         desenha: function () {
-            ctx.fillStyle = this.cor;
-            ctx.fillRect(this.x, this.y, this.largura, this.altura);
+
+            spriteBoneco.desenha(this.x, this.y);
+
+            
         }
     },
 
@@ -160,8 +162,11 @@ function main() {
     if (record = null)
         record = 0;
 
-    img = new Image();
-    img.src = "images/background.png";
+    bgImg = new Image();
+    bgImg.src = "images/background.png";
+
+    // bgPerson = new Image();
+    // bgPerson.src = "images/personagem.png";
 
     roda();
 }
@@ -186,8 +191,10 @@ function atualiza() {
 }
 
 function desenha() {
-    ctx.fillStyle = "#80daff";
-    ctx.fillRect(0, 0, LARGURA, ALTURA);
+
+    bg.desenha(0, 0);
+    spriteBoneco.desenha(50, 50);
+    
 
     ctx.fillStyle = "#fff";
     ctx.font = "50px Arial";
@@ -229,9 +236,7 @@ function desenha() {
         else {
             ctx.fillText(bloco.score, -39, 19);
         }
-            
         
-
         ctx.restore();
 
     } else if (estadoAtual == estados.jogando) {
