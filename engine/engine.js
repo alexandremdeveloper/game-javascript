@@ -1,5 +1,5 @@
 //variável do jogo
-var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, estadoAtual, record, img,
+var canvas, ctx, ALTURA, LARGURA, maxPulos = 3, velocidade = 6, estadoAtual, record, img,
 
     estados = {
         jogar: 0,
@@ -9,12 +9,19 @@ var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, esta
 
     chao = {
         y: 550,
+        x: 0,
         altura: 50,
-        cor: "#e8da78",
+
+        atualiza: function() {
+            this.x -= velocidade;
+            if (this.x <= -30) {
+                this.x = 0;
+            }
+        },
 
         desenha: function () {
-            ctx.fillStyle = this.cor;
-            ctx.fillRect(0, this.y, LARGURA, this.altura);
+            spriteChao.desenha(this.x, this.y);
+            spriteChao.desenha(this.x + spriteChao.largura, this.y);
         }
     },
 
@@ -23,16 +30,17 @@ var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, esta
         y: 0,
         altura: spriteBoneco.altura,
         largura: spriteBoneco.largura,
-        cor: "#ff9239",
         gravidade: 1.6,
         velocidade: 0,
         forcaDoPulo: 23.6,
         qntPulos: 0,
         score: 0,
+        rotacao: 0,
 
         atualiza: function () {
             this.velocidade += this.gravidade;
             this.y += this.velocidade;
+            this.rotacao += Math.PI / 180 * velocidade;
 
             if (this.y > chao.y - this.altura && estadoAtual != estados.perdeu) {
                 this.y = chao.y - this.altura
@@ -61,8 +69,15 @@ var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, esta
         },
 
         desenha: function () {
+            ctx.save();
+            //operacoes para rotacionar o contexto
 
-            spriteBoneco.desenha(this.x, this.y);
+            ctx.translate(this.x + this.largura / 2, this.y + this.altura / 2);
+            ctx.rotate(this.rotacao);
+            spriteBoneco.desenha(-this.largura / 2, -this.altura / 2);
+
+            ctx.restore();
+            // spriteBoneco.desenha(this.x, this.y);
 
             
         }
@@ -142,7 +157,7 @@ function main() {
     LARGURA = window.innerWidth;
 
     if (LARGURA >= 500) {
-        LARGURA = 600;
+        LARGURA = 595;
         ALTURA = 600;
     }
 
@@ -162,11 +177,8 @@ function main() {
     if (record = null)
         record = 0;
 
-    bgImg = new Image();
-    bgImg.src = "images/background.png";
-
-    // bgPerson = new Image();
-    // bgPerson.src = "images/personagem.png";
+        bgImg = new Image();
+        bgImg.src = "images/img.png";
 
     roda();
 }
@@ -179,21 +191,25 @@ function roda() {
 }
 
 function atualiza() {
-    frames++;
 
-    bloco.atualiza();
+    
 
     if (estadoAtual == estados.jogando) {
         obstaculos.atualiza();
-    } else if (estadoAtual == estados.perdeu) {
 
+        chao.atualiza();
+
+        bloco.atualiza();
     }
+    // } else if (estadoAtual == estados.perdeu) {
+
+    // }
 }
 
 function desenha() {
 
     bg.desenha(0, 0);
-    spriteBoneco.desenha(50, 50);
+    // spriteBoneco.desenha(50, 50);
     
 
     ctx.fillStyle = "#fff";
