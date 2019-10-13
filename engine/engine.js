@@ -1,11 +1,12 @@
-//variável do jogo
-var canvas, ctx, altura, largura, frames = 0, maxPulos = 3,
+//variáveis do jogo
+var canvas, ctx, altura, largura, frames = 0, maxPulos = 3, velocidade = 6,
 
+//objetos do jogo (chão, bloco, obstáculos)
 chao = {
     y: 550,
     altura: 50,
     cor: "#e8da78",
-
+    
     desenha: function (){
         ctx.fillStyle = this.cor;
         ctx.fillRect(0, this.y, largura, this.altura);
@@ -56,13 +57,20 @@ obstaculos = {
             x: largura,
             altura: 30 + Math.floor(21 * Math.random()),
             largura: 30 + Math.floor(120 * Math.random()),
-            cor: this._cor[Math.floor(5 * Math.random())]
+            cor: this._cores[Math.floor(5 * Math.random())]
         });
-        this.timerInsere = 30 + Math.floor(10 * Math.random());     
+        // this.timerInsere = 30 + Math.floor(10 * Math.random());     
     },
 
     atualiza: function () {
+        for (var i =0, tam = this._obs.length; i < tam; i++) {
+            var obs = this._obs[i];
+            obs.x -= velocidade;
 
+            if (obs.x <= -obs.largura) {
+                this._obs.splice(i, 1);
+            }
+        }
     }, 
 
     desenha: function () {
@@ -111,7 +119,8 @@ function roda () {
 function atualiza () {
     frames++;
 
-    bloco.atualiza(); 
+    bloco.atualiza();
+    obstaculos.atualiza();
 }
 
 function desenha () {
