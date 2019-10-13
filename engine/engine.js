@@ -1,36 +1,4 @@
-//variáveis do jogo
-var canvas, ctx, altura, largura, frames = 0, maxPulos = 3, velocidade = 6,
 
-//objetos do jogo (chão, bloco, obstáculos)
-chao = {
-    y: 550,
-    altura: 50,
-    cor: "#e8da78",
-    
-    desenha: function (){
-        ctx.fillStyle = this.cor;
-        ctx.fillRect(0, this.y, largura, this.altura);
-    }
-},
-
-bloco = {
-    x: 50,
-    y: 0,
-    altura: 50,
-    largura: 50,
-    cor: "#ff9239",
-    gravidade: 1.6,
-    velocidade: 0,
-    forcaDoPulo: 23.6,
-    qntPulos: 0,
-
-    atualiza: function () {
-        this.velocidade += this.gravidade;
-        this.y += this.velocidade;
-
-        if (this.y > chao.y - this.altura) {
-            this.y = chao.y - this.altura
-            this.qntPulos = 0;
 //variável do jogo
 var canvas, ctx, ALTURA, LARGURA, maxPulos = 3, velocidade = 6, estadoAtual, record, img,
 
@@ -45,7 +13,7 @@ var canvas, ctx, ALTURA, LARGURA, maxPulos = 3, velocidade = 6, estadoAtual, rec
         x: 0,
         altura: 50,
 
-        atualiza: function() {
+        atualiza: function () {
             this.x -= velocidade;
             if (this.x <= -30) {
                 this.x = 0;
@@ -112,14 +80,15 @@ var canvas, ctx, ALTURA, LARGURA, maxPulos = 3, velocidade = 6, estadoAtual, rec
             ctx.restore();
             // spriteBoneco.desenha(this.x, this.y);
 
-            
-        }
-    }, 
 
-    desenha: function() {
-        ctx.fillStyle = this.cor;
-        ctx.fillRect(this.x, this.y, this.largura, this.altura);
-    } 
+        },
+    
+
+    desenha: function () {
+            ctx.fillStyle = this.cor;
+            ctx.fillRect(this.x, this.y, this.largura, this.altura);
+        
+    },
 },
 
 obstaculos = {
@@ -138,7 +107,7 @@ obstaculos = {
     },
 
     atualiza: function () {
-        for (var i =0, tam = this._obs.length; i < tam; i++) {
+        for (var i = 0, tam = this._obs.length; i < tam; i++) {
             var obs = this._obs[i];
             obs.x -= velocidade;
 
@@ -146,8 +115,8 @@ obstaculos = {
                 this._obs.splice(i, 1);
             }
         }
-    }, 
     },
+},
 
     obstaculos = {
         _obs: [],
@@ -169,7 +138,7 @@ obstaculos = {
             if (this.tempoInsere == 0) {
                 this.insere();
             }
-            else { 
+            else {
                 this.tempoInsere--;
             }
             for (var i = 0, tam = this._obs.length; i < tam; i++) {
@@ -243,8 +212,8 @@ function main() {
     if (record = null)
         record = 0;
 
-        bgImg = new Image();
-        bgImg.src = "images/img.png";
+    bgImg = new Image();
+    bgImg.src = "images/img.png";
 
     roda();
 }
@@ -260,7 +229,7 @@ function atualiza() {
 
     bloco.atualiza();
     obstaculos.atualiza();
-    
+
 
     if (estadoAtual == estados.jogando) {
         obstaculos.atualiza();
@@ -278,7 +247,7 @@ function desenha() {
 
     bg.desenha(0, 0);
     // spriteBoneco.desenha(50, 50);
-    
+
 
     ctx.fillStyle = "#fff";
     ctx.font = "50px Arial";
@@ -300,7 +269,7 @@ function desenha() {
         }
 
         else if (record < 10) {
-            ctx.fillText("Record " + record, -99, -65 );
+            ctx.fillText("Record " + record, -99, -65);
         }
 
         else if (record >= 10 && record < 100) {
@@ -316,11 +285,11 @@ function desenha() {
         } else if (bloco.score >= 10 && bloco.score < 100) {
             ctx.fillText(bloco.score, -26, 19)
         }
-        
+
         else {
             ctx.fillText(bloco.score, -39, 19);
         }
-        
+
         ctx.restore();
 
     } else if (estadoAtual == estados.jogando) {
